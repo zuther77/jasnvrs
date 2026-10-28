@@ -1,0 +1,8 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      ADMIN_SYNC_TOKEN: ${ADMIN_SYNC_TOKEN:-dev-token}
+    restart: unless-stopped

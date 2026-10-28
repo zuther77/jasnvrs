@@ -1,0 +1,24 @@
+# Reference material from the prior implementation (never shipped)
+reference/
+
+# macOS
+.DS_Store
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.env
+.env.*
+!.env.example
+
+# Node / frontend build output
+frontend/node_modules/
+frontend/dist/
+frontend/tsconfig.tsbuildinfo
+
+# Logs
+*.log
+.vercel
