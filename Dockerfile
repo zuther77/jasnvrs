@@ -33,6 +33,6 @@ RUN useradd --create-home --uid 10001 appuser \
     && chown -R appuser:appuser /app
 USER appuser
 
-EXPOSE 8000
-
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Vercel (and other container hosts) inject PORT; shell form so ${PORT} expands
+# at runtime. Local `docker compose up` gets PORT=8000 via the default below.
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

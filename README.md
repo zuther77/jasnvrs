@@ -13,7 +13,7 @@ every morning before the N2EX day-ahead auction closes:
 Built with **React + Vite + TypeScript** (frontend) and **Python + FastAPI + SQLite** (backend),
 containerised with Docker, and deployable to Vercel 
 
-**Live app:** https://gridbrick-challenge.vercel.app/
+**Live app:** https://jasnvrs.vercel.app/
 
 > **AI tools were used** to build this project: planning, code, tests, documentation and the
 > demo script were produced with **Hermes Agent (Nous Research)** as an agentic developer,
