@@ -25,7 +25,7 @@ function FanTooltip({ active, payload, series = [] }: FanTooltipProps) {
   if (!active || !row) return null
   return (
     <div className="rounded-lg border border-border/70 bg-card px-3 py-2 text-xs shadow-card">
-      <p className="font-semibold text-fg">{String(row.hour_label)}:00 UTC</p>
+      <p className="font-semibold text-fg">{String(row.hour_label)} UTC</p>
       <dl className="mt-1 space-y-0.5 text-muted">
         {series.map((line) => {
           const value = row[line.key]
@@ -83,7 +83,7 @@ export function VintageFan({ forecast }: { forecast: ForecastResponse }) {
   ])
 
   return (
-    <figure aria-label="All WINDFOR forecast issues published on the decision date, one line per issue">
+    <figure aria-label="Every forecast version issued on the decision date, one line per version">
       <div className="h-[300px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={model.rows} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
@@ -131,13 +131,13 @@ export function VintageFan({ forecast }: { forecast: ForecastResponse }) {
       </div>
       <FanLegend series={model.series} />
       <p className="mt-2 text-xs text-muted">
-        {model.usableCount} of {model.issueCount} issues were available at gate closure.
+        {model.usableCount} of {model.issueCount} versions were published before the cut-off.
       </p>
       <figcaption className="mt-2 text-xs leading-snug text-muted">
         {CHART_SUBTITLES.fan}
       </figcaption>
       <ChartTable
-        caption="Forecast generation by issue and delivery hour"
+        caption="Forecast wind by version and delivery hour"
         testId="table-vintage-fan"
         columns={[
           { label: 'Hour (UTC)' },

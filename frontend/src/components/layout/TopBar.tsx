@@ -75,7 +75,7 @@ export function TopBar({ activeTab, onSelectTab }: TopBarProps) {
               Wind Forecast Insights Portal
             </p>
             <p className="text-xs text-muted">
-              Gate-closure forecast quality · GB national wind
+              Day-ahead wind forecast accuracy · GB national wind
             </p>
           </div>
         </div>

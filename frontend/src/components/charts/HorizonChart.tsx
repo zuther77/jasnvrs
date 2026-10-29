@@ -25,23 +25,23 @@ function HorizonTooltip({ active, payload }: HorizonTooltipProps) {
   return (
     <div className="rounded-lg border border-border/70 bg-card px-3 py-2 text-xs shadow-card">
       <p className="font-semibold text-fg">
-        {row.horizon_start_h}–{row.horizon_end_h} h horizon
+        {row.horizon_start_h}–{row.horizon_end_h} hours ahead
       </p>
       <dl className="mt-1 space-y-0.5 text-muted">
         <div className="flex justify-between gap-4">
-          <dt>MAE</dt>
+          <dt>Average miss</dt>
           <dd className="num text-fg">{formatNumber(row.mae_mw)} MW</dd>
         </div>
         <div className="flex justify-between gap-4">
-          <dt>RMSE</dt>
+          <dt>Big-miss measure</dt>
           <dd className="num text-fg">{formatNumber(row.rmse_mw)} MW</dd>
         </div>
         <div className="flex justify-between gap-4">
-          <dt>Bias</dt>
+          <dt>Ran high (+)</dt>
           <dd className="num text-forecast">{formatSignedNumber(row.bias_mw)} MW</dd>
         </div>
         <div className="flex justify-between gap-4">
-          <dt>Pairs</dt>
+          <dt>Hours scored</dt>
           <dd className="num text-fg">{formatNumber(row.count)}</dd>
         </div>
       </dl>
@@ -52,7 +52,7 @@ function HorizonTooltip({ active, payload }: HorizonTooltipProps) {
 export function HorizonChart({ rows }: { rows: ByHorizonRow[] }) {
   const chartRows = toHorizonRows(rows)
   return (
-    <figure aria-label="Grouped bars of MAE and RMSE by forecast horizon bucket">
+    <figure aria-label="Average miss and big-miss bars by how far ahead the forecast was made">
       <div className="h-[280px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartRows} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
@@ -83,14 +83,14 @@ export function HorizonChart({ rows }: { rows: ByHorizonRow[] }) {
             />
             <Bar
               dataKey="mae_mw"
-              name="MAE (MW)"
+              name="Average miss"
               fill={COLORS.actual}
               radius={[2, 2, 0, 0]}
               isAnimationActive={false}
             />
             <Bar
               dataKey="rmse_mw"
-              name="RMSE (MW)"
+              name="Big-miss measure"
               fill={COLORS.forecast}
               fillOpacity={0.75}
               radius={[2, 2, 0, 0]}
@@ -106,11 +106,11 @@ export function HorizonChart({ rows }: { rows: ByHorizonRow[] }) {
         caption="Error by forecast horizon bucket"
         testId="table-horizon"
         columns={[
-          { label: 'Horizon' },
-          { label: 'MAE (MW)', numeric: true },
-          { label: 'RMSE (MW)', numeric: true },
-          { label: 'Bias (MW)', numeric: true },
-          { label: 'Pairs', numeric: true },
+          { label: 'Hours ahead' },
+          { label: 'Average miss (MW)', numeric: true },
+          { label: 'Big-miss (MW)', numeric: true },
+          { label: 'Ran high (MW)', numeric: true },
+          { label: 'Hours', numeric: true },
         ]}
         rows={rows.map((row) => [
           `${row.horizon_start_h}–${row.horizon_end_h} h`,

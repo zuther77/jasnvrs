@@ -19,34 +19,42 @@ export function DayMetricsRow({ metrics, extremes }: DayMetricsRowProps) {
       : null
 
   return (
-    <section aria-label="Delivery-day forecast metrics">
+    <section aria-label="How this day's forecast did">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        <KpiCard label="MAE" value={formatMw(metrics.mae_mw)} sub="Mean absolute error" />
-        <KpiCard label="RMSE" value={formatMw(metrics.rmse_mw)} sub="Big misses count more" />
         <KpiCard
-          label="Bias"
-          value={formatMwSigned(metrics.bias_mw)}
-          tone={biasPositive ? 'forecast' : 'positive'}
-          sub={biasPositive ? 'Forecast ran high' : 'Forecast ran low'}
+          label="Average miss"
+          value={formatMw(metrics.mae_mw)}
+          sub="A typical hour on this day"
         />
         <KpiCard
-          label="Biggest shortfall"
+          label="Big-miss measure"
+          value={formatMw(metrics.rmse_mw)}
+          sub="Big misses count for more"
+        />
+        <KpiCard
+          label="Forecast ran high"
+          value={formatMwSigned(metrics.bias_mw)}
+          tone={biasPositive ? 'forecast' : 'positive'}
+          sub={biasPositive ? 'on average — buy cover for this gap' : 'on average — wind beat the forecast'}
+        />
+        <KpiCard
+          label="Worst short hour"
           value={formatMw(extremes.max_shortfall_mw)}
           tone="risk"
           sub={
             shortfallHour
-              ? `Largest hour where actual fell short, at ${shortfallHour}`
-              : 'No shortfall hour on this delivery day'
+              ? `${shortfallHour} — ${formatMw(extremes.max_shortfall_mw)} below forecast`
+              : 'Nothing short on this day'
           }
         />
         <KpiCard
-          label="Biggest over-delivery"
-          value={formatMwSigned(extremes.max_overdelivery_mw)}
+          label="Most over-bought hour"
+          value={formatMw(Math.abs(extremes.max_overdelivery_mw))}
           tone="positive"
           sub={
             overdeliveryHour
-              ? `Largest hour where wind beat the forecast, at ${overdeliveryHour}`
-              : 'No over-delivery hour on this delivery day'
+              ? `${overdeliveryHour} — ${formatMw(Math.abs(extremes.max_overdelivery_mw))} more wind than forecast`
+              : 'No hour with extra wind on this day'
           }
         />
       </div>

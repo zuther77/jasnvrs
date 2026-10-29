@@ -71,7 +71,7 @@ describe('Wind Forecast Insights Portal smoke tests', () => {
     expect(
       await screen.findByText('Forecast as known at 09:30 UTC, 5 Jan 2026'),
     ).toBeInTheDocument()
-    expect(screen.getByText('Gate closure 09:50 UTC')).toBeInTheDocument()
+    expect(screen.getByText('Market cut-off 09:50 UTC')).toBeInTheDocument()
     expect(screen.getAllByText('275.1 GWh').length).toBeGreaterThan(0)
     expect(screen.getAllByText('226.8 GWh').length).toBeGreaterThan(0)
 

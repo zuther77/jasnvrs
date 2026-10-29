@@ -46,7 +46,7 @@ function ScatterTooltip({ active, payload }: ScatterTooltipProps) {
           <dd className="num text-actualText">{formatNumber(row.actual_mw)} MW</dd>
         </div>
         <div className="flex justify-between gap-4">
-          <dt>Error</dt>
+          <dt>Gap</dt>
           <dd
             className={
               row.error_mw > 0
@@ -58,9 +58,9 @@ function ScatterTooltip({ active, payload }: ScatterTooltipProps) {
           >
             {formatSignedNumber(row.error_mw)} MW (
             {row.error_mw > 0
-              ? 'shortfall'
+              ? 'short'
               : row.error_mw < 0
-                ? 'over-delivery'
+                ? 'extra wind'
                 : 'in line'}
             )
           </dd>
@@ -122,7 +122,7 @@ export function ForecastScatter({ rows }: { rows: ScatterRow[] }) {
   return (
     <figure
       ref={figureRef}
-      aria-label="Scatter of gate-closure forecast against actual wind for every evaluated hour"
+      aria-label="Forecast against actual wind for every scored hour"
     >
       <div className="h-[280px] w-full">
         <ResponsiveContainer width="100%" height="100%">
@@ -166,7 +166,7 @@ export function ForecastScatter({ rows }: { rows: ScatterRow[] }) {
               strokeWidth={1}
             />
             <Scatter
-              name={`Delivery hours (${formatNumber(rows.length)})`}
+              name={`Hours scored (${formatNumber(rows.length)})`}
               data={chartRows}
               shape={<ScatterDot />}
               isAnimationActive={false}
@@ -175,22 +175,22 @@ export function ForecastScatter({ rows }: { rows: ScatterRow[] }) {
         </ResponsiveContainer>
       </div>
       <p className="mt-1 text-xs text-muted">
-        Dashed diagonal: forecast equals actual. Points above it were over-forecast
-        (shortfall risk); points below were under-forecast.
+        Dashed line = forecast matched actual. Above it, the forecast was too high (the
+        desk bought too little); below it, too low.
       </p>
       <figcaption className="mt-2 text-xs leading-snug text-muted">
         {CHART_SUBTITLES.scatter}
       </figcaption>
       <ChartTable
-        caption="Forecast versus actual by delivery hour"
+        caption="Forecast versus actual by hour"
         testId="table-scatter"
         note={sample.note}
         columns={[
           { label: 'Decision date' },
-          { label: 'Delivery hour (UTC)' },
+          { label: 'Hour (UTC)' },
           { label: 'Forecast (MW)', numeric: true },
           { label: 'Actual (MW)', numeric: true },
-          { label: 'Error (MW)', numeric: true },
+          { label: 'Gap (MW)', numeric: true },
         ]}
         rows={sample.rows.map((row) => [
           formatDay(row.decision_date),

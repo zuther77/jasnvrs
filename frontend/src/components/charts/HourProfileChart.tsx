@@ -35,15 +35,15 @@ function HourTooltip({ active, payload }: HourTooltipProps) {
       <p className="font-semibold text-fg">{formatHourSpan(row.hour_of_day)} UTC</p>
       <dl className="mt-1 space-y-0.5 text-muted">
         <div className="flex justify-between gap-4">
-          <dt>MAE</dt>
+          <dt>Average miss</dt>
           <dd className="num text-fg">{formatNumber(row.mae_mw)} MW</dd>
         </div>
         <div className="flex justify-between gap-4">
-          <dt>Bias</dt>
+          <dt>Ran high (+)</dt>
           <dd className="num text-forecast">{formatSignedNumber(row.bias_mw)} MW</dd>
         </div>
         <div className="flex justify-between gap-4">
-          <dt>Error P05–P95</dt>
+          <dt>Normal range</dt>
           <dd className="num text-fg">
             {formatSignedNumber(row.p05_mw)} to {formatSignedNumber(row.p95_mw)} MW
           </dd>
@@ -56,7 +56,7 @@ function HourTooltip({ active, payload }: HourTooltipProps) {
 export function HourProfileChart({ rows }: { rows: ByHourRow[] }) {
   const chartRows = toHourRows(rows)
   return (
-    <figure aria-label="Hour-of-day mean absolute error bars, bias line and P05 to P95 error band">
+    <figure aria-label="Average miss bars, ran-high line and normal range for each time of day">
       <div className="h-[280px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={chartRows} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
@@ -88,7 +88,7 @@ export function HourProfileChart({ rows }: { rows: ByHourRow[] }) {
             <ReferenceLine y={0} stroke={COLORS.border} strokeDasharray="3 3" />
             <Area
               dataKey="band"
-              name="P05–P95 error range"
+              name="Normal range (9 in 10 hours)"
               fill={COLORS.muted}
               fillOpacity={0.18}
               stroke="none"
@@ -96,14 +96,14 @@ export function HourProfileChart({ rows }: { rows: ByHourRow[] }) {
             />
             <Bar
               dataKey="mae_mw"
-              name="MAE (MW)"
+              name="Average miss"
               fill={COLORS.actual}
               radius={[2, 2, 0, 0]}
               isAnimationActive={false}
             />
             <Line
               dataKey="bias_mw"
-              name="Bias (MW, positive = ran high)"
+              name="Ran high (+)"
               type="monotone"
               stroke={COLORS.forecast}
               strokeWidth={2}
@@ -121,11 +121,11 @@ export function HourProfileChart({ rows }: { rows: ByHourRow[] }) {
         testId="table-hour-profile"
         columns={[
           { label: 'Delivery hour (UTC)' },
-          { label: 'MAE (MW)', numeric: true },
-          { label: 'Bias (MW)', numeric: true },
-          { label: 'P05 error (MW)', numeric: true },
-          { label: 'P50 error (MW)', numeric: true },
-          { label: 'P95 error (MW)', numeric: true },
+          { label: 'Average miss (MW)', numeric: true },
+          { label: 'Ran high (MW)', numeric: true },
+          { label: 'Low end (MW)', numeric: true },
+          { label: 'Middle (MW)', numeric: true },
+          { label: 'High end (MW)', numeric: true },
           { label: 'Hours', numeric: true },
         ]}
         rows={rows.map((row) => [

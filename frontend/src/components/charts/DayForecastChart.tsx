@@ -42,7 +42,7 @@ function DayTooltip({ active, payload }: DayTooltipProps) {
           <dd className="num text-actualText">{formatNumber(row.actual_mw)} MW</dd>
         </div>
         <div className="flex justify-between gap-4">
-          <dt>Error</dt>
+          <dt>Gap</dt>
           <dd
             className={
               row.error_mw > 0
@@ -54,16 +54,16 @@ function DayTooltip({ active, payload }: DayTooltipProps) {
           >
             {formatMwSigned(row.error_mw)} (
             {row.error_mw > 0
-              ? 'shortfall'
+              ? 'short'
               : row.error_mw < 0
-                ? 'over-delivery'
+                ? 'extra wind'
                 : 'in line'}
             )
           </dd>
         </div>
         {row.band_low_mw !== null && row.band_high_mw !== null ? (
           <div className="flex justify-between gap-4">
-            <dt>Historical range</dt>
+            <dt>Normal range</dt>
             <dd className="num text-fg">
               {formatMw(row.band_low_mw)} – {formatMw(row.band_high_mw)}
             </dd>
@@ -84,7 +84,7 @@ export function DayForecastChart({ series, byHour }: DayForecastChartProps) {
   const hasBand = Boolean(byHour && byHour.length > 0)
 
   return (
-    <figure aria-label="Gate-closure forecast and actual wind for each delivery hour, with error ribbon and historical band">
+    <figure aria-label="Forecast at the cut-off and actual wind for each delivery hour, with shortfall shading and normal range">
       <div className="h-[360px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={rows} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
@@ -116,7 +116,7 @@ export function DayForecastChart({ series, byHour }: DayForecastChartProps) {
             {hasBand ? (
               <Area
                 dataKey="band"
-                name="Historical 5–95% actual range"
+                name="Normal range (9 in 10 hours)"
                 fill={COLORS.muted}
                 fillOpacity={0.13}
                 stroke="none"
@@ -127,7 +127,7 @@ export function DayForecastChart({ series, byHour }: DayForecastChartProps) {
             {hasBand ? (
               <Line
                 dataKey="band_low_mw"
-                name="Band low"
+                name="Normal low"
                 type="linear"
                 stroke={COLORS.muted}
                 strokeDasharray="4 4"
@@ -141,7 +141,7 @@ export function DayForecastChart({ series, byHour }: DayForecastChartProps) {
             {hasBand ? (
               <Line
                 dataKey="band_high_mw"
-                name="Band high"
+                name="Normal high"
                 type="linear"
                 stroke={COLORS.muted}
                 strokeDasharray="4 4"
@@ -154,7 +154,7 @@ export function DayForecastChart({ series, byHour }: DayForecastChartProps) {
             ) : null}
             <Area
               dataKey="shortfall_ribbon"
-              name="Shortfall ribbon (forecast above actual)"
+              name="Shortfall (we were short)"
               fill={COLORS.risk}
               fillOpacity={0.2}
               stroke="none"
@@ -164,7 +164,7 @@ export function DayForecastChart({ series, byHour }: DayForecastChartProps) {
             />
             <Area
               dataKey="overdelivery_ribbon"
-              name="Over-delivery ribbon (forecast below actual)"
+              name="Extra wind (we bought too much)"
               fill={COLORS.positive}
               fillOpacity={0.2}
               stroke="none"
@@ -174,7 +174,7 @@ export function DayForecastChart({ series, byHour }: DayForecastChartProps) {
             />
             <Line
               dataKey="forecast_mw"
-              name="Forecast (gate closure)"
+              name="Forecast at cut-off"
               type="monotone"
               stroke={COLORS.forecast}
               strokeWidth={2.5}
@@ -183,7 +183,7 @@ export function DayForecastChart({ series, byHour }: DayForecastChartProps) {
             />
             <Line
               dataKey="actual_mw"
-              name="Actual"
+              name="Actual wind"
               type="monotone"
               stroke={COLORS.actual}
               strokeWidth={2}
@@ -195,12 +195,10 @@ export function DayForecastChart({ series, byHour }: DayForecastChartProps) {
         </ResponsiveContainer>
       </div>
       <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted">
+        <span>Amber = forecast at the cut-off; dashed blue = actual wind.</span>
         <span>
-          Solid amber = forecast; dashed blue = actual.
-        </span>
-        <span>
-          Shading: <span className="text-riskText">red = shortfall</span>,{' '}
-          <span className="text-positive">green = over-delivery</span>.
+          <span className="text-riskText">Red shading = we were short</span>;{' '}
+          <span className="text-positive">green = wind beat the forecast</span>.
         </span>
         {hasBand ? <span>{BAND_LABEL}</span> : null}
       </div>
@@ -208,15 +206,15 @@ export function DayForecastChart({ series, byHour }: DayForecastChartProps) {
         {CHART_SUBTITLES.dayForecast}
       </figcaption>
       <ChartTable
-        caption="Delivery-hour forecast and actual series"
+        caption="Forecast and actual by delivery hour"
         testId="table-day-series"
         columns={[
-          { label: 'Delivery hour (UTC)' },
+          { label: 'Hour (UTC)' },
           { label: 'Forecast (MW)', numeric: true },
           { label: 'Actual (MW)', numeric: true },
-          { label: 'Error (MW)', numeric: true },
-          { label: 'Historical low (MW)', numeric: true },
-          { label: 'Historical high (MW)', numeric: true },
+          { label: 'Gap (MW)', numeric: true },
+          { label: 'Normal low (MW)', numeric: true },
+          { label: 'Normal high (MW)', numeric: true },
         ]}
         rows={rows.map((row) => [
           formatHourSpan(row.hour_of_day),

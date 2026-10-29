@@ -7,14 +7,14 @@ export function EnergyRow({ summary }: { summary: DaySummaryTotals }) {
     <section aria-label="Delivery-day energy">
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <KpiCard
-          label="Forecast energy"
+          label="Forecast wind energy"
           value={formatGwh(summary.forecast_total_mwh)}
-          sub="Gate-closure forecast, 24 delivery hours"
+          sub="What we expected across the 24 hours"
         />
         <KpiCard
-          label="Actual energy"
+          label="Actual wind energy"
           value={formatGwh(summary.actual_total_mwh)}
-          sub="Settlement-period actuals, 48 half-hours"
+          sub="What wind actually delivered"
         />
         <KpiCard
           label="Average forecast"
@@ -22,7 +22,7 @@ export function EnergyRow({ summary }: { summary: DaySummaryTotals }) {
           sub={`Actual average ${formatMw(summary.actual_avg_mw)}`}
         />
         <KpiCard
-          label="Peak and low forecast"
+          label="Peak and low hour"
           value={`${formatMw(summary.forecast_peak_mw)} peak`}
           sub={`Peak at ${formatHour(summary.forecast_peak_hour_utc)} · low ${formatMw(
             summary.forecast_min_mw,

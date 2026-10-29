@@ -59,12 +59,12 @@ export function DecisionDayPage({
 
   return (
     <PageShell
-      title="What could the desk have known at gate closure?"
-      purpose="Pick a January decision date to see the gate-closure forecast the desk could act on, what wind actually delivered, how the vintage evolved during the day, and how unusual the miss was."
+      title="What the desk saw before bidding"
+      purpose="Pick a trading day to see the forecast the desk had at the 09:50 cut-off, what wind actually delivered, and how close the call turned out."
     >
       {days.status === 'loading' ? (
         <div className="rounded-xl border border-border/60 bg-card p-5 shadow-card">
-          <LoadingState label="Loading decision dates" />
+          <LoadingState label="Loading trading days" />
         </div>
       ) : null}
 
@@ -93,7 +93,7 @@ export function DecisionDayPage({
 
           {day.status === 'loading' ? (
             <div className="rounded-xl border border-border/60 bg-card p-5 shadow-card">
-              <LoadingState label="Loading decision day" />
+              <LoadingState label="Loading this day" />
             </div>
           ) : null}
 
@@ -132,7 +132,7 @@ export function DecisionDayPage({
 
       {days.status === 'ready' && !selectedDate ? (
         <div className="rounded-xl border border-border/60 bg-card p-5 shadow-card">
-          <LoadingState label="Selecting latest decision day" />
+          <LoadingState label="Selecting the latest day" />
         </div>
       ) : null}
     </PageShell>
@@ -158,7 +158,7 @@ function DayContent({ day, summary, forecast, onOpenMethod }: DayContentProps) {
         title={CHART_TITLES.dayForecast}
         badge={
           <Badge tone="forecast">
-            Gate-closure issue {day.gate_closure_issue_time_utc} UTC
+            Forecast used: {day.gate_closure_issue_time_utc} UTC version
           </Badge>
         }
       >
@@ -170,7 +170,7 @@ function DayContent({ day, summary, forecast, onOpenMethod }: DayContentProps) {
         {forecast.status === 'ready' && forecast.data ? (
           <VintageFan forecast={forecast.data} />
         ) : null}
-        {forecast.status === 'loading' ? <LoadingState label="Loading forecast vintages" /> : null}
+        {forecast.status === 'loading' ? <LoadingState label="Loading forecast versions" /> : null}
         {forecast.status === 'waiting' ? (
           <WaitingForApi
             endpoint={forecast.endpoint}
@@ -209,12 +209,12 @@ function BandStatus({
         className="mb-3 flex flex-wrap items-center gap-2 rounded-lg border border-forecast/30 bg-forecast/5 px-3 py-2 text-xs text-muted"
       >
         <span>
-          Historical band waiting for{' '}
-          <code className="num text-muted">{summary.endpoint}</code> — the chart is
-          live without it.
+          Normal range still loading from{' '}
+          <code className="num text-muted">{summary.endpoint}</code> — the chart works
+          without it.
         </span>
         <Button variant="ghost" className="px-2 py-1 text-xs" onClick={summary.retry}>
-          Retry band
+          Retry range
         </Button>
       </p>
     )
@@ -226,11 +226,11 @@ function BandStatus({
       className="mb-3 flex flex-wrap items-center gap-2 rounded-lg border border-risk/40 bg-risk/5 px-3 py-2 text-xs text-muted"
     >
       <span>
-        Historical band unavailable: {describeApiError(summary.error)} (
+        Normal range unavailable: {describeApiError(summary.error)} (
         <code className="num text-muted">{summary.endpoint}</code>)
       </span>
       <Button variant="ghost" className="px-2 py-1 text-xs" onClick={summary.retry}>
-        Retry band
+        Retry range
       </Button>
     </p>
   )

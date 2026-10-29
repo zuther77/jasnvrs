@@ -197,27 +197,26 @@ export function takeawaySentence(summary: SummaryResponse): string {
   const last = byHorizon[byHorizon.length - 1]
   const direction =
     overall.bias_mw >= 0
-      ? `It ran high by ${formatMw(overall.bias_mw)}`
-      : `It ran low by ${formatMw(Math.abs(overall.bias_mw))}`
+      ? `It ran high by ${formatMw(overall.bias_mw)} on average, so the desk was usually short and had to buy more.`
+      : `It ran low by ${formatMw(Math.abs(overall.bias_mw))} on average, so the desk sometimes bought more than it needed.`
 
   return (
-    `Across ${formatNumber(overall.count)} delivery hours, the gate-closure forecast ` +
-    `was off by ${formatMw(overall.mae_mw)} on average ` +
-    `(${formatPct(overall.mae_pct_of_mean_actual)} of mean actual wind). ` +
-    `${direction}, and ${formatPct(overall.hours_in_shortfall_pct)} of hours were ` +
-    `shortfall hours. Error grows from ${formatMw(first.mae_mw)} at ` +
-    `${formatHorizon(first.horizon_start_h, first.horizon_end_h)} to ` +
-    `${formatMw(last.mae_mw)} at ` +
-    `${formatHorizon(last.horizon_start_h, last.horizon_end_h)}. ` +
-    `The 95th-percentile over-forecast was ${formatMw(overall.p95_mw)} — ` +
-    `the margin the desk needed.`
+    `Across ${formatNumber(overall.count)} hours in January, the forecast missed by ` +
+    `${formatMw(overall.mae_mw)} in a typical hour — about ` +
+    `${formatPct(overall.mae_pct_of_mean_actual)} of the wind actually generated. ` +
+    `${direction} Misses grow the further ahead you look: about ` +
+    `${formatMw(first.mae_mw)} a few hours out, ${formatMw(last.mae_mw)} two days out. ` +
+    `In 19 hours out of 20 the forecast was no more than ${formatMw(overall.p95_mw)} ` +
+    `above what arrived.`
   )
 }
 
 export function decisionNoteSentence(day: DayResponse): string {
   return (
-    `This day's MAE was worse than ${formatPct(day.window_context.day_mae_percentile)} ` +
-    `of January days; bias above ${formatPct(day.window_context.day_bias_percentile)}.`
+    `This day's average miss was worse than on ` +
+    `${formatPct(day.window_context.day_mae_percentile)} of January days, and the ` +
+    `forecast ran high by more than on ` +
+    `${formatPct(day.window_context.day_bias_percentile)} of days.`
   )
 }
 
@@ -256,10 +255,10 @@ export function buildFan(forecast: ForecastResponse): FanModel {
     })
 
     const suffix = issue.is_gate_closure
-      ? 'gate closure'
+      ? 'used at cut-off'
       : issue.is_usable_at_gate_closure
-        ? 'usable'
-        : 'after gate'
+        ? 'before cut-off'
+        : 'after cut-off'
 
     return {
       key: `issue_${index}`,

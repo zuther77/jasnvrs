@@ -21,31 +21,32 @@ export const NAV_ITEMS = [
 export type TabId = (typeof NAV_ITEMS)[number]['id']
 
 export const CHART_SUBTITLES = {
-  daily: 'Average miss and signed bias for each of the 31 January decision days.',
-  hour: 'Which delivery hours are hardest to forecast; band is the 5–95% error range.',
-  horizon: 'How error grows with lead time — the cost of forecasting earlier.',
-  scatter: 'Every evaluated hour: points above the diagonal were over-forecast.',
+  daily: 'Each bar is one January trading day; the line shows how far the forecast ran above or below what arrived.',
+  hour: 'Which times of day are hardest to call. The shaded band covers 19 in 20 January hours.',
+  horizon: 'The same forecast, scored from a few hours ahead to two days ahead — earlier calls miss by more.',
+  scatter:
+    'Each dot is one delivery hour. Dots above the diagonal mean the forecast was too high, so the desk had to buy more at short notice.',
   dayForecast:
-    'The forecast the desk could act on at gate closure, against what wind actually delivered.',
-  fan: 'Every forecast published on the decision date; the gate-closure issue is highlighted.',
+    'The forecast the desk had at the 09:50 cut-off, against what wind actually delivered.',
+  fan: 'Every forecast version issued on the decision date. Only versions published before the 09:50 cut-off could be used; the 09:30 one is scored here.',
 } as const
 
 export const CHART_TITLES = {
-  daily: 'Daily error and bias',
-  hour: 'Hour-of-day error profile',
-  horizon: 'Error by forecast horizon',
-  scatter: 'Forecast vs actual, every hour',
-  dayForecast: 'Gate-closure forecast against delivery',
-  fan: 'Forecast vintage fan',
+  daily: 'Average miss, day by day',
+  hour: 'Average miss by time of day',
+  horizon: 'Miss grows the further ahead you look',
+  scatter: 'Forecast vs what actually arrived',
+  dayForecast: 'Forecast at the cut-off vs actual wind',
+  fan: 'Forecast versions issued that day',
 } as const
 
 export const AXIS_LABELS = {
   mw: 'MW',
-  horizon: 'Forecast horizon',
-  hour: 'Delivery hour (UTC)',
+  horizon: 'Hours ahead of delivery',
+  hour: 'Time of day (UTC)',
   actual: 'Actual wind (MW)',
   forecast: 'Forecast wind (MW)',
 } as const
 
 export const BAND_LABEL =
-  'Historical 5–95% actual range for this hour (January 2026), from the window error percentiles.'
+  'Shaded band: where 9 in 10 January hours landed for this time of day.'

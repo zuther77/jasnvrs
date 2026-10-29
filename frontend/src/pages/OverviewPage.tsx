@@ -35,8 +35,8 @@ export function OverviewPage({ onOpenMethod }: OverviewPageProps) {
 
   return (
     <PageShell
-      title="How good were the gate-closure forecasts?"
-      purpose="Every number below is measured against settled wind outturn for the January 2026 decision window. Positive error means the forecast ran above actual wind — a shortfall risk for a buyer."
+      title="How good were the forecasts?"
+      purpose="Every January 2026 trading day, measured against the wind that actually arrived. A positive number means the forecast was too high, so the desk had to buy more at short notice."
     >
       {summary.status === 'loading' ? (
         <section aria-label="Loading overview">
@@ -115,17 +115,17 @@ function OverviewContent({
       <section aria-label="Window KPIs">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           <KpiCard
-            label="Window MAE"
+            label="Average miss"
             value={formatMw(overall.mae_mw)}
-            sub={`${formatPct(overall.mae_pct_of_mean_actual)} of mean actual wind`}
+            sub={`${formatPct(overall.mae_pct_of_mean_actual)} of the wind we actually got`}
           />
           <KpiCard
-            label="Window RMSE"
+            label="Big-miss measure"
             value={formatMw(overall.rmse_mw)}
-            sub="Big misses count more than small ones"
+            sub="One huge miss counts for more than several small ones"
           />
           <KpiCard
-            label="Window bias"
+            label="Forecast ran high"
             value={formatMwSigned(overall.bias_mw)}
             tone={biasPositive ? 'forecast' : 'positive'}
             sub={biasPositive ? 'Forecasts ran high on average' : 'Forecasts ran low on average'}
@@ -140,16 +140,16 @@ function OverviewContent({
             }
           />
           <KpiCard
-            label="Worst decision day"
+            label="Worst day"
             value={formatDayShort(overall.worst_day.decision_date)}
-            sub={`MAE ${formatMw(overall.worst_day.mae_mw)}`}
+            sub={`Average miss ${formatMw(overall.worst_day.mae_mw)}`}
           />
           <KpiCard
-            label="Hours in shortfall"
+            label="Hours short of forecast"
             value={formatPct(overall.hours_in_shortfall_pct)}
-            sub={`of hours (${formatNumber(overall.hours_in_shortfall)} of ${formatNumber(
+            sub={`${formatNumber(overall.hours_in_shortfall)} of ${formatNumber(
               overall.count,
-            )})`}
+            )} hours`}
           />
         </div>
       </section>
