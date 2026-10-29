@@ -206,8 +206,8 @@ export function takeawaySentence(summary: SummaryResponse): string {
     `${formatPct(overall.mae_pct_of_mean_actual)} of the wind actually generated. ` +
     `${direction} Misses grow the further ahead you look: about ` +
     `${formatMw(first.mae_mw)} a few hours out, ${formatMw(last.mae_mw)} two days out. ` +
-    `In 19 hours out of 20 the forecast was no more than ${formatMw(overall.p95_mw)} ` +
-    `above what arrived.`
+    `Only 1 hour in 20 ran more than ${formatMw(overall.p95_mw)} above what ` +
+    `arrived — that is the margin a buyer should hold.`
   )
 }
 

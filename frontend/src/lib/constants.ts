@@ -22,7 +22,7 @@ export type TabId = (typeof NAV_ITEMS)[number]['id']
 
 export const CHART_SUBTITLES = {
   daily: 'Each bar is one January trading day; the line shows how far the forecast ran above or below what arrived.',
-  hour: 'Which times of day are hardest to call. The shaded band covers 19 in 20 January hours.',
+  hour: 'Which times of day are hardest to call. The shaded band covers 9 in 10 January hours.',
   horizon: 'The same forecast, scored from a few hours ahead to two days ahead — earlier calls miss by more.',
   scatter:
     'Each dot is one delivery hour. Dots above the diagonal mean the forecast was too high, so the desk had to buy more at short notice.',
